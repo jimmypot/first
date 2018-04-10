@@ -1,0 +1,7 @@
+hasattr
+getattr
+setattr
+
+
+
+

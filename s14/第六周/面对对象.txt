@@ -1,0 +1,293 @@
+世界万物，皆可分类
+世界万物，皆为对象
+
+面对对象编程
+----基本特征：
+类(Class): 用来描述具有相同的属性和方法的对象的集合。它定义了该集合中每个对象所共有的属性和方法。对象是类的实例。
+类变量：类变量在整个实例化的对象中是公用的。类变量定义在类中且在函数体之外。类变量通常不作为实例变量使用。
+数据成员：类变量或者实例变量用于处理类及其实例对象的相关的数据。
+方法重写：如果从父类继承的方法不能满足子类的需求，可以对其进行改写，这个过程叫方法的覆盖（override），也称为方法的重写。
+实例变量：定义在方法中的变量，只作用于当前实例的类。
+继承：即一个派生类（derived class）继承基类（base class）的字段和方法。继承也允许把一个派生类的对象作为一个基类对象对待。
+例如，有这样一个设计：一个Dog类型的对象派生自Animal类，这是模拟"是一个（is-a）"关系（例图，Dog是一个Animal）。
+实例化：创建一个类的实例，类的具体对象。
+方法：类中定义的函数。
+对象：通过类定义的数据结构实例。对象包括两个数据成员（类变量和实例变量）和方法。
+
+类和实例
+类(Class)和实例(Instance)是面向对象最重要的概念。
+类是指抽象出的模板。实例则是根据类创建出来的具体的“对象”，每个对象都拥有从类中继承的相同的方法，但各自的数据可能不同。
+在python中定义一个类:
+class Student(object):  #新生类
+    pass
+关键字class后面跟着类名，类名通常是大写字母开头的单词，紧接着是(object)，表示该类是从哪个类继承下来的。
+通常，如果没有合适的继承类，就使用object类，这是所有类最终都会继承下来的类。
+
+类对象
+类对象支持两种操作：属性引用和实例化。
+属性引用使用和 Python 中所有的属性引用一样的标准语法：obj.name。
+类对象创建后，类命名空间中所有的命名都是有效属性名。所以如果类定义是这样:
+class MyClass:
+    """一个简单的类实例"""
+    i = 12345 #类变量
+    def f(self):      #类的方法
+        return 'hello world'
+# 实例化类
+x = MyClass()
+# 访问类的属性和方法
+print("MyClass 类的属性 i 为：", x.i)
+print("MyClass 类的方法 f 输出为：", x.f())
+以上创建了一个新的类实例并将该对象赋给局部变量 x，x 为空的对象。
+
+执行以上程序输出结果为：
+MyClass 类的属性 i 为： 12345
+MyClass 类的方法 f 输出为： hello world
+
+很多类都倾向于将对象创建为有初始状态的。因此类可能会定义一个名为 __init__() 的特殊方法（构造方法），像下面这样：
+def __init__(self):
+    self.data = []
+类定义了 __init__() 方法的话，类的实例化操作会自动调用 __init__() 方法。所以在下例中，可以这样创建一个新的实例:
+x = MyClass()
+当然， __init__() 方法可以有参数，参数通过 __init__() 传递到类的实例化操作上。例如:
+class Complex:
+    def __init__(self, realpart, imagpart):
+        self.r = realpart
+        self.i = imagpart
+x = Complex(3.0, -4.5)
+print(x.r, x.i)   # 输出结果：3.0 -4.5
+
+self代表类的实例，而非类
+类的方法与普通的函数只有一个特别的区别——它们必须有一个额外的第一个参数名称, 按照惯例它的名称是 self。
+__init__方法的第一个参数永远都是self，表示创建实例本身，在__init__方法内部，可以把各种属性绑定到self，
+因为self指向创建的实例本身。有了__init__方法，在创建实例的时候，就不能传入空的参数了，必须传入与__init__方法匹配的参数，
+但self不需要传，Python解释器自己会把实例变量传进去
+class Test:
+    def prt(self):
+        print(self)
+        print(self.__class__)
+
+t = Test()
+t.prt()
+
+以上实例执行结果为：
+<__main__.Test instance at 0x100771878>
+__main__.Test
+从执行结果可以很明显的看出，self 代表的是类的实例，代表当前对象的地址，而 self.class 则指向类。
+
+面向对象编程的一个重要特点就是数据封装。
+实例：
+>>> class Student(object):
+...     def __init__(self, name, score):
+...         self.name = name
+...         self.score = score
+...     def print_score(self):
+...         print("%s: %s" % (self.name, self.score))
+...
+>>> bart = Student('zhang', 99)
+>>> bart.print_score()
+zhang: 99
+
+***访问限制
+
+在Class内部，可以有属性和方法，而外部代码可以通过直接调用实例变量的方法来操作数据，这样，就隐藏了内部的复杂逻辑。
+但是，从前面Student类的定义来看，外部代码还是可以自由地修改一个实例的name、score属性：
+>>> bart = Student('Bart Simpson', 98)
+>>> bart.score
+98
+>>> bart.score = 59
+>>> bart.score
+59
+如果想让内部属性不被外部访问，可以把属性的名称前加上两个下划线__，在Python中，实例的变量名如果以双下划线开头，
+就变成了一个私有变量(private)，只有内部可以访问，外部不能访问。
+类的私有属性
+__private_attrs：两个下划线开头，声明该属性为私有，不能在类地外部被使用或直接访问。在类内部的方法中使用时 self.__private_attrs。
+类的私有方法
+__private_method：两个下划线开头，声明该方法为私有方法，只能在类的内部调用 ，不能在类地外部调用。self.__private_methods。
+class Student(object):
+    def __init__(self, name, score):
+        self.__name = name
+        self.__score = score
+    def print_score(self):
+        print('%s: %s' % (self.__name, self.__score))
+改完后，对于外部代码来说，没有什么变动，但是已经无法从外部访问到实例变量.__name和实例变量：
+>>> bart = Student('Bart Simpson', 98)
+>>> bart.__name
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'Student' object has no attribute '__name'
+这样就确保了外部代码不能随意修改对象内部的状态，这样通过访问限制的保护，代码更加健壮。
+
+如果外部还需要访问到这两个内部状态的话，可以给Student类增加get_name和get_score这样的方法。
+如果外部还有修改需求的话，就给该类再增加set_score或set_name方法。用这样的方式去get set 一个内部保护量：
+class Student(object):
+    def get_name(self):
+        return self.__name
+    def get_score(self):
+        return self.__score
+    def set_name(self, name):
+        self.__name = name
+    def set_score(self, score):
+        self.__score = score
+    # 对于set_score(self, score)我们可以借由set方法顺便做参数检查，提高代码安全性
+    def set_safe_score(self, score):
+        if score >= 0 and score <= 100:
+            self.__score = score
+        else:
+            raise ValueError('bad score')
+需要注意的是，Python中如果变量名以双下划线开头和结尾的，是特殊变量__XXX__。特殊变量是可以直接从类内部访问的。
+
+有些时候，你会看到以一个下划线开头的实例变量名，比如_name，这样的实例变量外部是可以访问的，
+但是，按照约定俗成的规定，当你看到这样的变量时，意思就是，“虽然我可以被访问，但是，请把我视为私有变量，不要随意访问”。
+
+类的私有方法实例如下：
+class Site:
+    def __init__(self, name, url):
+        self.name = name       # public
+        self.__url = url   # private
+
+    def who(self):
+        print('name  : ', self.name)
+        print('url : ', self.__url)
+
+    def __foo(self):          # 私有方法
+        print('这是私有方法')
+
+    def foo(self):            # 公共方法
+        print('这是公共方法')
+        self.__foo()
+
+x = Site('菜鸟教程', 'www.runoob.com')
+x.who()        # 正常输出
+x.foo()        # 正常输出
+x.__foo()      # 报错
+
+双下划线开头的实例变量是不是一定不能从外部访问呢？其实也不是。
+不能直接访问__name是因为Python解释器对外把__name变量改成了_Student__name，
+所以，仍然可以通过_Student__name来访问__name变量：
+>>> bart._Student__name
+'Bart Simpson'
+但是强烈建议你不要这么干，因为不同版本的Python解释器可能会把__name改成不同的变量名。
+Python的访问限制其实并不严格，主要靠自觉。
+
+
+******面对对象的三大特性
+
+封装————数据和逻辑都被封装起来，直接调用方法即可，但却可以不用知道内部的细节。
+封装，顾名思义就是将内容封装到某个地方，以后再去调用被封装在某处的内容。
+所以，在使用面向对象的封装特性时，需要两大步骤：
+将内容封装到某处；
+从某处调用被封装的内容。
+第一步：将内容封装到某处
+class Foo:
+    def __init__(self,name,age):    #称为构造方法，根据类创建对象时自动执行
+        self.name = name
+        self.age = age
+
+#根据类创建对象，自动执行Foo类的__init__方法
+obj1 = Foo('wupeiqi',18)    #将wupeiqi和18分别封装到obj1的name和age属性中
+obj2 = Foo('alex',73)
+self 是一个形式参数，当执行 obj1 = Foo('wupeiqi', 18 ) 时，self 等于 obj1,当执行 obj2 = Foo('alex', 78 ) 时，
+self 等于 obj2，所以，内容其实被封装到了对象 obj1 和 obj2 中，每个对象中都有 name 和 age 属性，
+
+第二步：从某处调用被封装的内容
+
+调用被封装的内容时，有两种情况：
+通过对象直接调用
+通过self间接调用
+
+1、通过对象直接调用被封装的内容
+上图展示了对象 obj1 和 obj2 在内存中保存的方式，根据保存格式可以如此调用被封装的内容：对象.属性名
+class Foo:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+obj1 = Foo('wupeiqi', 18)
+print obj1.name    # 直接调用obj1对象的name属性
+print obj1.age     # 直接调用obj1对象的age属性
+
+obj2 = Foo('alex', 73)
+print obj2.name    # 直接调用obj2对象的name属性
+print obj2.age     # 直接调用obj2对象的age属性
+
+2、通过self间接调用被封装的内容
+执行类中的方法时，需要通过self间接调用被封装的内容
+class Foo:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def detail(self):
+        print self.name
+        print self.age
+obj1 = Foo('wupeiqi', 18)
+obj1.detail()  # Python默认会将obj1传给self参数，即：obj1.detail(obj1)，所以，此时方法内部的 self ＝ obj1，
+即：self.name 是 wupeiqi ；self.age 是 18
+
+obj2 = Foo('alex', 73)
+obj2.detail()  # Python默认会将obj2传给self参数，即：obj1.detail(obj2)，所以，此时方法内部的 self ＝ obj2，
+即：self.name 是 alex ； self.age 是 78
+综上所述，对于面向对象的封装来说，其实就是使用构造方法将内容封装到 对象 中，然后通过对象直接或者self间接获取被封装的内容。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+只要是对象，就肯定属于某一类
+只要是对象，就肯定有对象
+
+
+调用函数--》执行——》返回结果
+实例化： def __init__(self):      《----构造函数
+
+r1 = Role.__init__() return x342423
+r1 = Role(r1,'alex','police','money')
+r1.name = 'alex'
+r1.role = 'polie'
+r1.money = '15000'
+
+r1.buy_gun()  #Role.buy_gun(r1)
+
+析构函数： 在实例释放或者销毁的时候执行的，通常用于做一些收尾工作，如关闭一些接口
+def __del__(self):
+    print('%s 彻底死了。。。'%self.name)
+
+

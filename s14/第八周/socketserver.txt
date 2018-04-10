@@ -1,0 +1,13 @@
+创建一个socketserver 至少分以下几步:
+
+>>First, you must create a request handler class by subclassing the BaseRequestHandlerclass and overriding its handle() method;
+this method will process incoming requests.(你必须创建一个请求处理类，并且他要继承父类BaseRequestHandler,并且要重写handel()方法) 　　
+>>Second, you must instantiate one of the server classes, passing it the server’s address and the request handler class.
+（你必须实例化TCPServer,并且传递server ip和上面创建的请求处理类，给这个TCPServer）
+>>Then call the handle_request() or serve_forever() method of the server object to process one or many requests.
+(server.handel_request()#只处理一个请求
+server.serve_forever() #处理多个一个请求，永远执行)
+>>Finally, call server_close() to close the socket.
+
+
+

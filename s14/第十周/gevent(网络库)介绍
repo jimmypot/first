@@ -1,0 +1,13 @@
+****gevent，它是一个并发网络库。
+它的协程是基于greenlet的，并基于libev实现快速事件循环（Linux上是epoll，FreeBSD上是kqueue，Mac OS X上是select）。
+有了gevent，协程的使用将无比简单，你根本无须像greenlet一样显式的切换，每当一个协程阻塞时，程序将自动调度，gevent处理了所有的底层细节。
+
+细心的朋友们在运行上面gevent实例中时会发现，其实程序运行的时间同不用协程是一样的，是三个网站打开时间的总和。
+可是理论上协程是非阻塞的，那运行时间应该等于最长的那个网站打开时间呀？其实这是因为Python标准库里的socket是阻塞式的，
+DNS解析无法并发，包括像urllib库也一样，所以这种情况下用协程完全没意义。
+
+那怎么办？
+一种方法是使用gevent下的socket模块，我们可通过”from gevent import socket”来导入。
+****不过更常用的方法是使用猴子补丁（Monkey patching）
+
+

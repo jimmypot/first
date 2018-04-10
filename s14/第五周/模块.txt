@@ -1,0 +1,93 @@
+
+1.模块的定义：
+--模块：用来从逻辑上组织python代码（变量，函数，类，逻辑：实现一个功能），本质就是.py的文件,(文件的名字为：test.py,取test)
+        n个 .py 文件组成的代码集合就称为模块,把相关的代码分配到一个模块里能让你的代码更好用，更易懂。
+
+模块能定义函数，类和变量，模块里也能包含可执行的代码。
+--Python中的包：用来从逻辑上组织模块，本质就是一个目录（必须带有一个_iniy_.py的文件）
+包是一个分层次的文件目录结构，它定义了一个由模块及子包，和子包下的子包等组成的 Python 的应用环境。
+简单来说，包就是文件夹，但该文件夹下必须存在 __init__.py 文件, 该文件的内容可以为空。__int__.py用于标识当前文件夹是一个包。
+
+考虑一个在 package_runoob 目录下的 runoob1.py、runoob2.py、__init__.py 文件，test.py 为测试调用包的代码，目录结构如下：
+test.py
+package_runoob
+|-- __init__.py
+|-- runoob1.py
+|-- runoob2.py
+源代码如下：
+package_runoob/runoob1.py
+def runoob1():
+   print "I'm in runoob1"
+
+package_runoob/runoob2.py
+def runoob2():
+   print "I'm in runoob2"
+
+现在，在 package_runoob 目录下创建 __init__.py：
+package_runoob/__init__.py
+if __name__ == '__main__':
+    print '作为主程序运行'
+else:
+    print 'package_runoob 初始化'
+
+然后我们在 package_runoob 同级目录下创建 test.py 来调用 package_runoob 包
+
+test.py
+# 导入 Phone 包
+from package_runoob.runoob1 import runoob1
+from package_runoob.runoob2 import runoob2
+runoob1()
+runoob2()
+
+以上实例输出结果：
+package_runoob 初始化
+I'm in runoob1
+I'm in runoob2
+如上，为了举例，我们只在每个文件里放置了一个函数，但其实你可以放置许多函数在这些文件里。
+
+2.模块定义好后，我们可以使用 import 语句来引入模块，语法如下：
+1--import modelu_name
+2--from module_alex import logger
+3--from momdelu_alex import logger as logger_alex
+4--from module_alex import *
+
+3.import的本质
+--导入模块的本质就是把py文件解释一遍
+--搜索路径:
+搜索路径是一个解释器会先进行搜索的所有目录的列表,当你导入一个模块，Python 解析器对模块位置的搜索顺序是：
+1、当前目录
+2、如果不在当前目录，Python 则搜索在 shell 变量 PYTHONPATH 下的每个目录。
+3、如果都找不到，Python会察看默认路径。UNIX下，默认路径一般为/usr/local/lib/python/。
+模块搜索路径存储在 system 模块的 sys.path 变量中。变量里包含当前目录，PYTHONPATH和由安装过程决定的默认目录。
+当解释器遇到 import 语句，如果模块在当前的搜索路径就会被导入。
+作为环境变量，PYTHONPATH 由装在一个列表里的许多目录组成。PYTHONPATH 的语法和 shell 变量 PATH 的一样。
+在 Windows 系统，典型的 PYTHONPATH 如下：set PYTHONPATH=c:\python27\lib;
+    import导入模块时先在同级目录下找，如果没有，则在sys.path里找如果sys.path路径列表没有你想要的路径，
+    可以通过 sys.path.append('路径') 添加。通过os模块可以获取各种目录，例如：
+        import sys
+        import os
+        pre_path = os.path.abspath('../')
+        sys.path.append(pre_path)
+--导入包的本质就是解释运行_init_.py文件
+
+4.导入优化
+form module_test import test（避免重复查找模块，直接取到函数）
+
+5.模块的分类
+a:标准库****
+    1.time与datetime(两个模块) ---->时间戳、格式化的字符串、struct_time(元组)
+    2.random模块
+    3.os模块
+    4.sys模块
+    5.shutil模块
+    6.shelve模块
+    7.xml处理模块
+    8.pyYaml
+    9.configParser模块
+    10.hashlib模块
+    11.re模块（正则表达式）
+
+b:开源模块
+c:自定义模块
+
+
